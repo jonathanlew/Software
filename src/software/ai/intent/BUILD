@@ -20,24 +20,6 @@ cc_library(
 )
 
 cc_library(
-    name = "chip_intent",
-    srcs = ["chip_intent.cpp"],
-    hdrs = ["chip_intent.h"],
-    deps = [
-        ":direct_primitive_intent",
-    ],
-)
-
-cc_test(
-    name = "chip_intent_test",
-    srcs = ["chip_intent_test.cpp"],
-    deps = [
-        ":chip_intent",
-        "@gtest//:gtest_main",
-    ],
-)
-
-cc_library(
     name = "kick_intent",
     srcs = ["kick_intent.cpp"],
     hdrs = ["kick_intent.h"],
@@ -99,7 +81,6 @@ cc_library(
     name = "all_intents",
     hdrs = ["all_intents.h"],
     deps = [
-        ":chip_intent",
         ":direct_primitive_intent",
         ":kick_intent",
         ":move_intent",

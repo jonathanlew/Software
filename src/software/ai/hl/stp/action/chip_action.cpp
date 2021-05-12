@@ -1,7 +1,7 @@
 #include "software/ai/hl/stp/action/chip_action.h"
 
 #include "shared/constants.h"
-#include "software/ai/intent/chip_intent.h"
+#include "software/ai/intent/kick_intent.h"
 #include "software/ai/intent/move_intent.h"
 #include "software/geom/algorithms/contains.h"
 #include "software/geom/polygon.h"
@@ -122,8 +122,9 @@ void ChipAction::calculateNextIntent(IntentCoroutine::push_type& yield)
         }
         else
         {
-            yield(std::make_unique<ChipIntent>(robot->id(), chip_origin, chip_direction,
-                                               chip_distance_meters));
+            yield(std::make_unique<KickIntent>(
+                robot->id(), chip_origin, chip_direction,
+                AutoChipOrKick{AutoChipOrKickMode::AUTOCHIP, chip_distance_meters}));
         }
     } while (!ball.hasBallBeenKicked(chip_direction));
 }

@@ -13,11 +13,10 @@ class KickIntent : public DirectPrimitiveIntent
      * @param robot_id The id of the robot that this Intent is for
      * @param dest The destination of the Movement
      * @param final_angle The final angle the robot should have at the end of the movement
-     * @param final_speed The final speed the robot should have when it arrives at its
-     * destination
+     * @param auto_chip_or_kick The command to autochip or autokick
      */
     explicit KickIntent(unsigned int robot_id, const Point& dest,
-                        const Angle& final_angle, double final_speed);
+                        const Angle& final_angle, AutoChipOrKick auto_chip_or_kick);
 
     KickIntent() = delete;
 };

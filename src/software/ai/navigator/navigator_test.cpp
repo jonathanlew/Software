@@ -65,7 +65,8 @@ TEST_F(ThetaStarNavigatorTest, convert_chip_intent_to_move_with_autochip_primiti
     World world = ::TestUtil::createBlankTestingWorld();
 
     std::vector<std::unique_ptr<Intent>> intents;
-    intents.emplace_back(std::make_unique<ChipIntent>(0, Point(), Angle::quarter(), 0));
+    intents.emplace_back(std::make_unique<KickIntent>(
+        0, Point(), Angle::quarter(), AutoChipOrKick{AutoChipOrKickMode::AUTOCHIP, 2.3}));
 
     auto primitive_set_msg = navigator.getAssignedPrimitives(world, intents);
 
@@ -76,7 +77,7 @@ TEST_F(ThetaStarNavigatorTest, convert_chip_intent_to_move_with_autochip_primiti
         *createMovePrimitive(Point(), 0, Angle::quarter(), DribblerMode::OFF,
                              AutoChipOrKick{
                                  AutoChipOrKickMode::AUTOCHIP,
-                                 0,
+                                 2.3,
                              },
                              MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0);
     EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equals(
@@ -88,7 +89,8 @@ TEST_F(ThetaStarNavigatorTest, convert_kick_intent_to_move_with_autokick_primiti
     World world = ::TestUtil::createBlankTestingWorld();
 
     std::vector<std::unique_ptr<Intent>> intents;
-    intents.emplace_back(std::make_unique<KickIntent>(0, Point(), Angle::quarter(), 0));
+    intents.emplace_back(std::make_unique<KickIntent>(
+        0, Point(), Angle::quarter(), AutoChipOrKick{AutoChipOrKickMode::AUTOKICK, 1}));
 
     auto primitive_set_msg = navigator.getAssignedPrimitives(world, intents);
 
@@ -99,7 +101,7 @@ TEST_F(ThetaStarNavigatorTest, convert_kick_intent_to_move_with_autokick_primiti
         *createMovePrimitive(Point(), 0, Angle::quarter(), DribblerMode::OFF,
                              AutoChipOrKick{
                                  AutoChipOrKickMode::AUTOKICK,
-                                 0,
+                                 1,
                              },
                              MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0);
     EXPECT_TRUE(google::protobuf::util::MessageDifferencer::Equals(

@@ -7,7 +7,7 @@ cc_library(
     deps = [
         ":action",
         "//shared:constants",
-        "//software/ai/intent:chip_intent",
+        "//software/ai/intent:kick_intent",
         "//software/ai/intent:move_intent",
         "//software/geom:polygon",
         "//software/geom:triangle",

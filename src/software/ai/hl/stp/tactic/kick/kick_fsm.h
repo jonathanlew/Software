@@ -37,7 +37,8 @@ struct KickFSM
             event.common.set_intent(std::make_unique<KickIntent>(
                 event.common.robot.id(), event.control_params.kick_origin,
                 event.control_params.kick_direction,
-                event.control_params.kick_speed_meters_per_second));
+                AutoChipOrKick{AutoChipOrKickMode::AUTOKICK,
+                               event.control_params.kick_speed_meters_per_second}));
         };
 
         /**

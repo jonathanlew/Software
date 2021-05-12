@@ -2,7 +2,7 @@
 
 #include "software/ai/hl/stp/tactic/get_behind_ball/get_behind_ball_fsm.h"
 #include "software/ai/hl/stp/tactic/tactic.h"
-#include "software/ai/intent/chip_intent.h"
+#include "software/ai/intent/kick_intent.h"
 
 struct ChipFSM
 {
@@ -34,10 +34,11 @@ struct ChipFSM
          * @param event ChipFSM::Update event
          */
         const auto update_chip = [](auto event) {
-            event.common.set_intent(std::make_unique<ChipIntent>(
+            event.common.set_intent(std::make_unique<KickIntent>(
                 event.common.robot.id(), event.control_params.chip_origin,
                 event.control_params.chip_direction,
-                event.control_params.chip_distance_meters));
+                AutoChipOrKick{AutoChipOrKickMode::AUTOCHIP,
+                               event.control_params.chip_distance_meters}));
         };
 
         /**
