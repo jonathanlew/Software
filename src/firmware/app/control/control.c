@@ -39,21 +39,30 @@ float app_control_getMaximalTorqueScaling(const ForceWheel_t* force_wheels[4],
         float back_emf          = curr_motor_rpm * constants.motor_back_emf_per_rpm;
         float effective_voltage = fabsf(resistive_voltage_loss + back_emf);
 
+if(fabsf(resistive_voltage_loss)>1e-8f)
+{
         float slip_ratio =
             constants.motor_max_voltage_before_wheel_slip / fabsf(resistive_voltage_loss);
         if (slip_ratio < slip_ratio_min)
         {
             slip_ratio_min = slip_ratio;
         }
+}
         if (effective_voltage > max_effective_motor_voltage)
         {
             max_effective_motor_voltage = effective_voltage;
         }
     }
 
+if(fabsf(max_effective_motor_voltage)>1e-8f)
+{
     float emf_ratio_min = battery_voltage / max_effective_motor_voltage;
-
     return (emf_ratio_min > slip_ratio_min) ? slip_ratio_min : emf_ratio_min;
+}
+else{
+    return (slip_ratio_min);
+}
+
 }
 
 /**
