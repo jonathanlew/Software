@@ -42,4 +42,5 @@ class PathManager
      * @return obstacles
      */
     virtual const std::vector<ObstaclePtr> getObstacles(void) const = 0;
+    virtual std::unordered_set<Point> getBlockedPoints()            = 0;
 };

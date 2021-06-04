@@ -35,6 +35,7 @@ class PathPlanner
     virtual std::optional<Path> findPath(const Point &start, const Point &destination,
                                          const Rectangle &navigable_area,
                                          const std::vector<ObstaclePtr> &obstacles) = 0;
+    virtual std::unordered_set<Point> getBlockedPoints()                            = 0;
 
     virtual ~PathPlanner() = default;
 };

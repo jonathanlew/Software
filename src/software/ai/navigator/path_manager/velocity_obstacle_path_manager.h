@@ -24,6 +24,7 @@ class VelocityObstaclePathManager : public PathManager
         std::unique_ptr<PathPlanner> path_planner,
         RobotNavigationObstacleFactory robot_navigation_obstacle_factory);
 
+    std::unordered_set<Point> getBlockedPoints() override;
 
    private:
     /**
