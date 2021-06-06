@@ -26,15 +26,34 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
                                           const World &world)
 {
     std::shared_ptr<DribbleTactic> dribble_tactic = std::make_shared<DribbleTactic>();
-    dribble_tactic->updateControlParams(std::nullopt, std::nullopt, true);
+    dribble_tactic->updateRobot(world.friendlyTeam().getRobotById(0).value());
+
     std::shared_ptr<MoveTactic> move_tactic = std::make_shared<MoveTactic>(true);
 
+    size_t current_gate = 0;
+    std::array<Point, 4> gate_points = {GATE_ONE_MIDPOINT, GATE_TWO_MIDPOINT, GATE_THREE_MIDPOINT, GATE_FOUR_MIDPOINT};
+
+    dribble_tactic->updateControlParams(gate_points[current_gate], Angle::quarter(), true);
     do
     {
         TacticVector result = {};
         if (world.gameState().isPlaying())
         {
             // TODO (#2108): implement parcour
+            if (dribble_tactic->done()) {
+                if (current_gate < gate_points.size()) {
+
+                    current_gate++;
+
+                    Angle finishing_orientation = Angle::quarter();
+                    if (current_gate % 2 != 0) {
+                        finishing_orientation = Angle::threeQuarter();
+                    }
+
+                    dribble_tactic->updateControlParams(gate_points[current_gate], finishing_orientation, 0.0);
+                }
+            }
+
             result.emplace_back(dribble_tactic);
         }
         else

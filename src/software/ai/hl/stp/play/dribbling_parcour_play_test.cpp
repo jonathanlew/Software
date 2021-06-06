@@ -42,10 +42,14 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_stopped)
 
 TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
 {
-    BallState ball_state(Point(-0.8, 0), Vector(0, 0));
+    BallState ball_state(Point(-1.5, 0), Vector(0, 0));
     auto friendly_robots = TestUtil::createStationaryRobotStatesWithId(
-        {Point(4, 0), Point(0.5, 0), Point(-3, 1)});
+            { Point(-1.9, 0)});
     setFriendlyGoalie(0);
+
+    auto enemy_robots = TestUtil::createStationaryRobotStatesWithId(
+            {Point(1.5, 0), Point(0.9, 0), Point(0.4, 0), Point(-0.2, 0), Point(-1, 0)});
+
     setAIPlay(TYPENAME(DribblingParcourPlay));
 
     setRefereeCommand(RefereeCommand::FORCE_START, RefereeCommand::STOP);
@@ -63,6 +67,6 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
 
     std::vector<ValidationFunction> non_terminating_validation_functions = {};
 
-    runTest(field, ball_state, friendly_robots, {}, terminating_validation_functions,
+    runTest(field, ball_state, friendly_robots, enemy_robots, terminating_validation_functions,
             non_terminating_validation_functions, Duration::fromSeconds(10));
 }
