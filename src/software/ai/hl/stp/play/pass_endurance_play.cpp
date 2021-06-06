@@ -1,7 +1,9 @@
 #include "software/ai/hl/stp/play/pass_endurance_play.h"
 
 #include "shared/constants.h"
+#include "software/ai/hl/stp/tactic/attacker/attacker_tactic.h"
 #include "software/ai/hl/stp/tactic/move/move_tactic.h"
+#include "software/ai/hl/stp/tactic/receiver_tactic.h"
 #include "software/util/design_patterns/generic_factory.h"
 
 PassEndurancePlay::PassEndurancePlay(std::shared_ptr<const PlayConfig> config)
@@ -28,27 +30,40 @@ void PassEndurancePlay::getNextTactics(TacticCoroutine::push_type &yield,
     std::generate(move_tactics.begin(), move_tactics.end(),
                   []() { return std::make_shared<MoveTactic>(true); });
 
+    /**
+     *            0
+     *           / \
+     *          /   \
+     *         /     \
+     *        /       \
+     *       /         \
+     *      1-----------2
+     *
+     * Attempt to pass from point 0 to 1 to 2 and back to 0 again
+     */
+
+    std::array<Point, NUM_ROBOTS> pass_points = {Point(-2.25, 2), Point(-4.25, -2),
+                                                 Point(-0.25, -2)};
+    std::unordered_map<Point, Pass> start_point_to_pass;
+    for (unsigned int i = 0; i < NUM_ROBOTS; i++)
+    {
+        start_point_to_pass.insert(
+            {pass_points[i], Pass(pass_points[i], pass_points[i % NUM_ROBOTS],
+                                  ROBOT_MAX_SPEED_METERS_PER_SECOND - 1)});
+    }
+
     do
     {
         TacticVector result = {};
         if (world.gameState().isPlaying())
         {
-            // TODO (#2109): replace this example play with an actual implementation of
-            // pass endurance
-
-            // The angle between each robot spaced out in a circle around the ball
-            Angle angle_between_robots =
-                Angle::full() / static_cast<double>(move_tactics.size());
-
-            for (size_t k = 0; k < move_tactics.size(); k++)
-            {
-                move_tactics[k]->updateControlParams(
-                    world.ball().position() +
-                        Vector::createFromAngle(angle_between_robots *
-                                                static_cast<double>(k + 1)),
-                    (angle_between_robots * static_cast<double>(k + 1)) + Angle::half(),
-                    0);
-            }
+            auto selected_pass = start_point_to_pass.at(*std::min_element(
+                pass_points.begin(), pass_points.end(),
+                [world](const Point &a, const Point &b) -> bool {
+                    return (a - world.ball().position()).lengthSquared() <
+                           (b - world.ball().position()).lengthSquared();
+                }));
+            (void)selected_pass;
         }
         else
         {

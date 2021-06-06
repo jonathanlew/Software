@@ -20,5 +20,5 @@ class PassEndurancePlay : public Play
 
    private:
     // 3 robots for this hardware challenge
-    const unsigned int NUM_ROBOTS = 3;
+    static constexpr unsigned int NUM_ROBOTS = 3;
 };
