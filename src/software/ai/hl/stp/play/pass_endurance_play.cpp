@@ -3,7 +3,7 @@
 #include "shared/constants.h"
 #include "software/ai/hl/stp/tactic/attacker/attacker_tactic.h"
 #include "software/ai/hl/stp/tactic/move/move_tactic.h"
-#include "software/ai/hl/stp/tactic/receiver_tactic.h"
+#include "software/ai/hl/stp/tactic/receiver/receiver_tactic.h"
 #include "software/util/design_patterns/generic_factory.h"
 
 PassEndurancePlay::PassEndurancePlay(std::shared_ptr<const PlayConfig> config)
@@ -48,48 +48,56 @@ void PassEndurancePlay::getNextTactics(TacticCoroutine::push_type &yield,
     for (unsigned int i = 0; i < NUM_ROBOTS; i++)
     {
         start_point_to_pass_and_next_point.insert(
-            {pass_points[i], std::make_pair(Pass(pass_points[i], pass_points[(i+1) % NUM_ROBOTS],
-                                  BALL_MAX_SPEED_METERS_PER_SECOND - 1), pass_points[(i+2) % NUM_ROBOTS])});
+            {pass_points[i],
+             std::make_pair(Pass(pass_points[i], pass_points[(i + 1) % NUM_ROBOTS],
+                                 BALL_MAX_SPEED_METERS_PER_SECOND - 1),
+                            pass_points[(i + 2) % NUM_ROBOTS])});
     }
-    auto attacker =
-        std::make_shared<AttackerTactic>(play_config->getAttackerTacticConfig());
 
     do
     {
         if (world.gameState().isPlaying())
         {
             // Select pass closest to ball position
-            auto pass_and_next_point = start_point_to_pass_and_next_point.at(*std::min_element(
-                pass_points.begin(), pass_points.end(),
-                [world](const Point &a, const Point &b) -> bool {
-                    return (a - world.ball().position()).lengthSquared() <
-                           (b - world.ball().position()).lengthSquared();
-                }));
+            auto pass_and_next_point =
+                start_point_to_pass_and_next_point.at(*std::min_element(
+                    pass_points.begin(), pass_points.end(),
+                    [world](const Point &a, const Point &b) -> bool {
+                        return (a - world.ball().position()).lengthSquared() <
+                               (b - world.ball().position()).lengthSquared();
+                    }));
             auto pass = pass_and_next_point.first;
-            // Perform the pass and wait until the receiver is finished
-            auto receiver = std::make_shared<ReceiverTactic>(
-                world.field(), world.friendlyTeam(), world.enemyTeam(), pass, world.ball(),
-                false);
+            auto attacker =
+                std::make_shared<AttackerTactic>(play_config->getAttackerTacticConfig());
+            auto receiver = std::make_shared<ReceiverTactic>(pass);
 
             do
             {
                 attacker->updateControlParams(pass);
                 receiver->updateControlParams(pass);
-                std::get<0>(move_tactics)->updateControlParams(pass_and_next_point.second, (pass.receiverPoint() - pass_and_next_point.second).orientation(), 0);
-                std::get<1>(move_tactics)->updateControlParams(pass.passerPoint(), (pass.receiverPoint() -pass.passerPoint()).orientation(), 0);
-                
+                std::get<0>(move_tactics)
+                    ->updateControlParams(
+                        pass_and_next_point.second,
+                        (pass.receiverPoint() - pass_and_next_point.second).orientation(),
+                        0);
+                std::get<1>(move_tactics)
+                    ->updateControlParams(
+                        pass.passerPoint(),
+                        (pass.receiverPoint() - pass.passerPoint()).orientation(), 0);
+
 
                 if (!attacker->done())
                 {
-                yield (PriorityTacticVector{{attacker,receiver, std::get<0>(move_tactics)}});
+                    yield(PriorityTacticVector{
+                        {attacker, receiver, std::get<0>(move_tactics)}});
                 }
                 else
                 {
-                yield (PriorityTacticVector{{receiver, std::get<0>(move_tactics),std::get<1>(move_tactics)}});
+                    yield(PriorityTacticVector{{receiver, std::get<0>(move_tactics),
+                                                std::get<1>(move_tactics)}});
                 }
 
             } while (!receiver->done());
-
         }
         else
         {
@@ -102,9 +110,9 @@ void PassEndurancePlay::getNextTactics(TacticCoroutine::push_type &yield,
                     (initial_offset + static_cast<int>(k)) * 4 * ROBOT_MAX_RADIUS_METERS);
                 move_tactics[k]->updateControlParams(next_position, Angle::zero(), 0);
             }
-        TacticVector result = {};
+            TacticVector result = {};
             result.insert(result.end(), move_tactics.begin(), move_tactics.end());
-        yield({{result}});
+            yield({{result}});
         }
     } while (true);
 }

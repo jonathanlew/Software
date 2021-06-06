@@ -39,8 +39,9 @@ TEST_F(PassEndurancePlayTest, test_pass_endurance_play_force_start)
 
     std::vector<ValidationFunction> non_terminating_validation_functions = {};
 
-    runTest(field, ball_state, friendly_robots, enemy_team, terminating_validation_functions,
-            non_terminating_validation_functions, Duration::fromSeconds(30));
+    runTest(field, ball_state, friendly_robots, enemy_team,
+            terminating_validation_functions, non_terminating_validation_functions,
+            Duration::fromSeconds(30));
 }
 
 TEST_F(PassEndurancePlayTest, test_pass_endurance_play_stopped)
