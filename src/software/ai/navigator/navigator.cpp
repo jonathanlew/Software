@@ -147,3 +147,8 @@ std::vector<ObstaclePtr> Navigator::getObstacles()
 {
     return path_manager->getObstacles();
 }
+
+std::unordered_set<Point> Navigator::getBlockedPoints()
+{
+    return path_manager->getBlockedPoints();
+}

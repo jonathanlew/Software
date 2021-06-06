@@ -2,9 +2,11 @@
 
 AIDrawFunction drawNavigator(std::shared_ptr<Navigator> navigator)
 {
-    auto planned_paths = navigator->getPlannedPathPoints();
-    auto obstacles     = navigator->getObstacles();
-    auto draw_function = [planned_paths, obstacles](QGraphicsScene* scene) {
+    auto planned_paths  = navigator->getPlannedPathPoints();
+    auto obstacles      = navigator->getObstacles();
+    auto blocked_points = navigator->getBlockedPoints();
+    auto draw_function  = [planned_paths, obstacles,
+                          blocked_points](QGraphicsScene* scene) {
         QPen path_pen(navigator_path_color);
         // The cap style must be NOT be set to SquareCap. It can be set to anything else.
         // Drawing a line of length 0 with the SquareCap style causes a large line to be
@@ -42,6 +44,10 @@ AIDrawFunction drawNavigator(std::shared_ptr<Navigator> navigator)
         for (const auto& obstacle : obstacles)
         {
             obstacle->accept(obstacle_artist);
+        }
+        for (const auto& p : blocked_points)
+        {
+            drawCircle(scene, Circle(p, 0.01), obstacle_pen);
         }
     };
 

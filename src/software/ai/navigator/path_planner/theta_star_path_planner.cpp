@@ -14,6 +14,11 @@ ThetaStarPathPlanner::ThetaStarPathPlanner()
 {
 }
 
+std::unordered_set<Point> ThetaStarPathPlanner::getBlockedPoints()
+{
+    return blocked_points_;
+}
+
 bool ThetaStarPathPlanner::isCoordNavigable(const Coordinate &coord) const
 {
     // Returns true if row number and column number is in range
@@ -28,6 +33,7 @@ void ThetaStarPathPlanner::findAllBlockedCoords()
 
         for (Point &blocked_point : blocked_points)
         {
+            blocked_points_.insert(blocked_point);
             blocked_grid.insert(convertPointToCoord(blocked_point));
         }
     }
@@ -572,6 +578,7 @@ void ThetaStarPathPlanner::resetAndInitializeMemberVariables(
     blocked_grid.clear();
     unblocked_grid.clear();
     line_of_sight_cache.clear();
+    blocked_points_.clear();
     cell_heuristics = std::vector<std::vector<CellHeuristic>>(
         num_grid_rows,
         std::vector<CellHeuristic>(num_grid_cols, ThetaStarPathPlanner::CellHeuristic()));

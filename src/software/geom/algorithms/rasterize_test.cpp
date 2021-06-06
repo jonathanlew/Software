@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "software/geom/algorithms/contains.h"
+<<<<<<< HEAD
 #include "software/geom/algorithms/distance.h"
 #include "software/logger/logger.h"
 #include "software/test_util/test_util.h"
@@ -29,6 +30,8 @@ namespace TestUtil
         }
     }
 };  // namespace TestUtil
+=======
+>>>>>>> draw_rasterized_points
 
 //////////////////////////////////////////////////////
 ////              Testing Circles                 ////
@@ -70,17 +73,44 @@ TEST(RasterizeTest, test_large_circle)
 {
     double robot_obstacle = 3.f;
     Circle circle({0, 0}, robot_obstacle);
+<<<<<<< HEAD
     double pixel_size                    = 0.1f;
     std::vector<Point> rasterized_points = rasterize(circle, pixel_size);
+=======
+    double theta_star_grid_square_size   = 0.1f;
+    std::vector<Point> rasterized_points = rasterize(circle, theta_star_grid_square_size);
+>>>>>>> draw_rasterized_points
 
     for (Point p : rasterized_points)
     {
         EXPECT_TRUE(contains(circle, p)) << p;
     }
+<<<<<<< HEAD
     // sqrt(2) * pixel_size since the circle rasterize algorithm does not guarantee that
     // the points are all aligned in x and y axis.
     double max_dist = std::sqrt(2) * pixel_size;
     TestUtil::checkPointsCloseToEachOther(rasterized_points, max_dist);
+=======
+    EXPECT_EQ(rasterized_points.size(), 9);
+}
+
+
+//////////////////////////////////////////////////////
+////              Testing Polygons                ////
+//////////////////////////////////////////////////////
+TEST(RasterizeTest, test_polygon_triangle_contains_point)
+{
+    // Hexagon centered at origin with the following points
+    Polygon hexagon{{0.0f, 2.0f},    // top vertex
+                    {2.0f, 1.0f},    // top right vertex
+                    {2.0f, -1.0f},   // bottom right vertex
+                    {0.0f, -2.0f},   // bottom vertex
+                    {-2.0f, -1.0f},  // bottom left vertex
+                    {-2.0f, 1.0f}};  // top left vertex
+
+    double pixel_size                    = 1.f;
+    std::vector<Point> rasterized_points = rasterize(hexagon, pixel_size);
+>>>>>>> draw_rasterized_points
 }
 
 //////////////////////////////////////////////////////
@@ -135,6 +165,7 @@ TEST(RasterizeTest, test_pixel_size_one_dimesnsion_not_multiple_of_rectangle_dim
     std::vector<Point> rasterized_points = rasterize(rectangle, pixel_size);
 
     for (Point p : rasterized_points)
+<<<<<<< HEAD
     {
         EXPECT_TRUE(contains(rectangle, p));
     }
@@ -216,6 +247,8 @@ TEST(RasterizeTest, test_speed_rectangle)
     LOG(WARNING) << "max tick duration: " << duration_ms << "ms" << std::endl;
 
     for (Point p : rasterized_points)
+=======
+>>>>>>> draw_rasterized_points
     {
         bool result = contains(rectangle, p);
         // TODO: remove this if statement
@@ -226,3 +259,7 @@ TEST(RasterizeTest, test_speed_rectangle)
         EXPECT_TRUE(contains(rectangle, p));
     }
 }
+<<<<<<< HEAD
+=======
+// TODO could check that the points are offsetted by pixel_size!?
+>>>>>>> draw_rasterized_points

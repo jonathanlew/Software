@@ -55,6 +55,8 @@ class Navigator : public IntentVisitor
      */
     std::vector<ObstaclePtr> getObstacles();
 
+    std::unordered_set<Point> getBlockedPoints();
+
     /**
      * Registers the given Intent for navigation
      *

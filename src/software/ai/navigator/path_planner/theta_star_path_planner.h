@@ -25,6 +25,7 @@
 class ThetaStarPathPlanner : public PathPlanner
 {
    public:
+    std::unordered_set<Point> getBlockedPoints() override;
     ThetaStarPathPlanner();
 
     /**
@@ -483,4 +484,6 @@ class ThetaStarPathPlanner : public PathPlanner
     // Cache of line of sight that maps a pair of
     // coordinates to whether those two Coordinates have line of sight between them
     std::map<CoordinatePair, bool> line_of_sight_cache;
+
+    std::unordered_set<Point> blocked_points_;
 };

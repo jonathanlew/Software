@@ -8,6 +8,11 @@ VelocityObstaclePathManager::VelocityObstaclePathManager(
 {
 }
 
+std::unordered_set<Point> VelocityObstaclePathManager::getBlockedPoints()
+{
+    return path_planner->getBlockedPoints();
+}
+
 const std::map<RobotId, std::optional<Path>> VelocityObstaclePathManager::getManagedPaths(
     const std::unordered_set<PathObjective> &objectives, const Rectangle &navigable_area)
 {
