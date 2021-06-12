@@ -25,7 +25,7 @@ class MoveIntent : public NavigatingIntent
                         const BallCollisionType& ball_collision_type,
                         const AutoChipOrKick& auto_chip_or_kick,
                         const MaxAllowedSpeedMode& max_allowed_speed_mode,
-                        double target_spin_rev_per_s);
+                        double target_spin_rev_per_s, bool face_forward = false);
 
     MoveIntent() = delete;
 
@@ -59,6 +59,7 @@ class MoveIntent : public NavigatingIntent
      * @return the target spin speed
      */
     double getTargetSpinRevPerS() const;
+    bool getFaceForward() const;
 
     /**
      * Compares MoveIntents for equality. MoveIntents are considered equal if all
@@ -84,4 +85,5 @@ class MoveIntent : public NavigatingIntent
     DribblerMode dribbler_mode;
     AutoChipOrKick auto_chip_or_kick;
     double target_spin_rev_per_s;
+    bool face_forward;
 };

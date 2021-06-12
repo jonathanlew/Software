@@ -10,7 +10,8 @@ DribbleTactic::DribbleTactic()
       fsm(DribbleFSM(std::make_shared<Point>())),
       control_params{DribbleFSM::ControlParams{.dribble_destination       = std::nullopt,
                                                .final_dribble_orientation = std::nullopt,
-                                               .allow_excessive_dribbling = false}}
+                                               .allow_excessive_dribbling = false,
+                                               .face_forward              = false}}
 {
 }
 
@@ -18,11 +19,12 @@ void DribbleTactic::updateWorldParams(const World &world) {}
 
 void DribbleTactic::updateControlParams(std::optional<Point> dribble_destination,
                                         std::optional<Angle> final_dribble_orientation,
-                                        bool allow_excessive_dribbling)
+                                        bool allow_excessive_dribbling, bool face_forward)
 {
     control_params.dribble_destination       = dribble_destination;
     control_params.final_dribble_orientation = final_dribble_orientation;
     control_params.allow_excessive_dribbling = allow_excessive_dribbling;
+    control_params.face_forward              = face_forward;
 }
 
 double DribbleTactic::calculateRobotCost(const Robot &robot, const World &world) const

@@ -94,6 +94,8 @@ class NavigatingPrimitiveCreator : public NavigatingIntentVisitor
 
     std::shared_ptr<const NavigatorConfig> config;
     std::optional<TbotsProto::Primitive> current_primitive;
+    // starting point of path
+    Point path_origin;
     Point new_destination;
     double new_final_speed;
 };
