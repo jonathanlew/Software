@@ -17,6 +17,7 @@ TbotsProto::Primitive NavigatingPrimitiveCreator::createNavigatingPrimitive(
     current_primitive = std::nullopt;
     auto result       = calculateDestinationAndFinalSpeed(intent.getFinalSpeed(), path,
                                                     enemy_robot_obstacles);
+    path_origin       = path.getStartPoint();
     new_destination   = result.first;
     new_final_speed   = result.second;
     intent.accept(*this);
@@ -25,10 +26,21 @@ TbotsProto::Primitive NavigatingPrimitiveCreator::createNavigatingPrimitive(
 
 void NavigatingPrimitiveCreator::visit(const MoveIntent &intent)
 {
-    current_primitive = *createMovePrimitive(
-        new_destination, new_final_speed, intent.getFinalAngle(),
-        intent.getDribblerMode(), intent.getAutoChipOrKick(),
-        intent.getMaxAllowedSpeedMode(), intent.getTargetSpinRevPerS());
+    if (intent.getFaceForward())
+    {
+        Angle face_forward_dir = (new_destination - path_origin).orientation();
+        current_primitive      = *createMovePrimitive(
+            new_destination, new_final_speed, face_forward_dir, intent.getDribblerMode(),
+            intent.getAutoChipOrKick(), intent.getMaxAllowedSpeedMode(),
+            intent.getTargetSpinRevPerS());
+    }
+    else
+    {
+        current_primitive = *createMovePrimitive(
+            new_destination, new_final_speed, intent.getFinalAngle(),
+            intent.getDribblerMode(), intent.getAutoChipOrKick(),
+            intent.getMaxAllowedSpeedMode(), intent.getTargetSpinRevPerS());
+    }
 }
 
 std::pair<Point, double> NavigatingPrimitiveCreator::calculateDestinationAndFinalSpeed(

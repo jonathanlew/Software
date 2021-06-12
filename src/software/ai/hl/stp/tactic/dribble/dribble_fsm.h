@@ -35,6 +35,7 @@ struct DribbleFSM
         std::optional<Angle> final_dribble_orientation;
         // whether to allow excessive dribbling, i.e. more than 1 metre at a time
         bool allow_excessive_dribbling;
+        bool face_forward;
     };
 
     DEFINE_UPDATE_STRUCT_WITH_CONTROL_AND_COMMON_PARAMS
@@ -247,7 +248,8 @@ struct DribbleFSM
                 event.common.robot.id(), intercept_position, face_ball_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW,
                 AutoChipOrKick{AutoChipOrKickMode::OFF, 0},
-                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0));
+                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0,
+                event.control_params.face_forward));
         };
 
         /**
@@ -276,10 +278,18 @@ struct DribbleFSM
                     AutoChipOrKick{AutoChipOrKickMode::AUTOKICK, DRIBBLE_KICK_SPEED};
             }
 
+            bool face_forward = event.control_params.face_forward;
+
+            if (comparePoints(ball_position, target_destination, 0.1))
+            {
+                // rotate to face the right away when close enough
+                face_forward = false;
+            }
+
             event.common.set_intent(std::make_unique<MoveIntent>(
                 event.common.robot.id(), target_destination, target_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW, auto_chip_or_kick,
-                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0));
+                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0, face_forward));
         };
 
         /**

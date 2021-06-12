@@ -6,13 +6,14 @@ MoveIntent::MoveIntent(unsigned int robot_id, const Point& destination,
                        const BallCollisionType& ball_collision_type,
                        const AutoChipOrKick& auto_chip_or_kick,
                        const MaxAllowedSpeedMode& max_allowed_speed_mode,
-                       double target_spin_rev_per_s)
+                       double target_spin_rev_per_s, bool face_forward)
     : NavigatingIntent(robot_id, destination, final_speed, ball_collision_type,
                        max_allowed_speed_mode),
       final_angle(final_angle),
       dribbler_mode(dribbler_mode),
       auto_chip_or_kick(auto_chip_or_kick),
-      target_spin_rev_per_s(target_spin_rev_per_s)
+      target_spin_rev_per_s(target_spin_rev_per_s),
+      face_forward(face_forward)
 {
 }
 
@@ -25,6 +26,12 @@ void MoveIntent::accept(NavigatingIntentVisitor& visitor) const
 {
     visitor.visit(*this);
 }
+
+bool MoveIntent::getFaceForward() const
+{
+    return face_forward;
+}
+
 
 const Angle& MoveIntent::getFinalAngle() const
 {
