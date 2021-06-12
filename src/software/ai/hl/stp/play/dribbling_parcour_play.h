@@ -7,6 +7,8 @@ const Point GATE_ONE_MIDPOINT = Point(-0.6, 0);
 const Point GATE_TWO_MIDPOINT = Point(0.1, 0);
 const Point GATE_THREE_MIDPOINT = Point(0.65, 0);
 const Point GATE_FOUR_MIDPOINT = Point(1.2, 0);
+const Point GATE_FOUR_POS = Point(1.2, 0.2);
+const Point GATE_FOUR_NEG = Point(1.2, -0.2);
 
 /**
  * Play for the dribbling parcour hardware challenge

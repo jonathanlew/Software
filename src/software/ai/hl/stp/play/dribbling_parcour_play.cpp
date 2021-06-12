@@ -33,6 +33,8 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
     size_t current_gate = 0;
     std::array<Point, 4> gate_points = {GATE_ONE_MIDPOINT, GATE_TWO_MIDPOINT, GATE_THREE_MIDPOINT, GATE_FOUR_MIDPOINT};
 
+    int times_crossed = 0;
+
     dribble_tactic->updateControlParams(gate_points[current_gate], Angle::quarter(), true);
     do
     {
@@ -41,16 +43,33 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
         {
             // TODO (#2108): implement parcour
             if (dribble_tactic->done()) {
-                if (current_gate < gate_points.size()) {
-
-                    current_gate++;
+                if (current_gate <= gate_points.size()) {
 
                     Angle finishing_orientation = Angle::quarter();
                     if (current_gate % 2 != 0) {
                         finishing_orientation = Angle::threeQuarter();
                     }
 
-                    dribble_tactic->updateControlParams(gate_points[current_gate], finishing_orientation, 0.0);
+                    if (current_gate == 4)
+                    {
+                        if (times_crossed == 3) {
+                            continue; //done
+                        }
+
+                        if (times_crossed % 2 == 0)
+                        {
+                            dribble_tactic->updateControlParams(GATE_FOUR_NEG, finishing_orientation, 0.0);
+                        }
+                        else
+                        {
+                            dribble_tactic->updateControlParams(GATE_FOUR_POS, finishing_orientation, 0.0);
+                        }
+                        times_crossed++;
+                    }
+                    else {
+                        dribble_tactic->updateControlParams(gate_points[current_gate], finishing_orientation, 0.0);
+                        current_gate++;
+                    }
                 }
             }
 

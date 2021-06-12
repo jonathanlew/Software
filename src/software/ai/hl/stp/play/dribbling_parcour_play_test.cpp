@@ -42,6 +42,7 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_stopped)
 
 TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
 {
+    enableVisualizer();
     BallState ball_state(Point(-1.5, 0), Vector(0, 0));
     auto friendly_robots = TestUtil::createStationaryRobotStatesWithId(
             { Point(-1.9, 0)});
@@ -59,7 +60,7 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
         // time to settle into position and be observed with the Visualizer
         // TODO (#2108): Implement proper validation
         [](std::shared_ptr<World> world_ptr, ValidationCoroutine::push_type& yield) {
-            while (world_ptr->getMostRecentTimestamp() < Timestamp::fromSeconds(9.5))
+            while (world_ptr->getMostRecentTimestamp() < Timestamp::fromSeconds(20))
             {
                 yield("Timestamp not at 9.5s");
             }
@@ -68,5 +69,5 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
     std::vector<ValidationFunction> non_terminating_validation_functions = {};
 
     runTest(field, ball_state, friendly_robots, enemy_robots, terminating_validation_functions,
-            non_terminating_validation_functions, Duration::fromSeconds(10));
+            non_terminating_validation_functions, Duration::fromSeconds(20));
 }
