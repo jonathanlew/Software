@@ -31,7 +31,10 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
     std::shared_ptr<MoveTactic> move_tactic = std::make_shared<MoveTactic>(true);
 
     size_t current_gate = 0;
+    size_t current_step = 0;
     std::array<Point, 4> gate_points = {GATE_ONE_MIDPOINT, GATE_TWO_MIDPOINT, GATE_THREE_MIDPOINT, GATE_FOUR_MIDPOINT};
+
+    std::array<std::array<Point, 2>, 4> gates = {GATE_ONE, GATE_TWO, GATE_THREE, GATE_FOUR};
 
     int times_crossed = 0;
 
@@ -41,20 +44,18 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
         TacticVector result = {};
         if (world.gameState().isPlaying())
         {
-            // TODO (#2108): implement parcour
             if (dribble_tactic->done()) {
                 if (current_gate <= gate_points.size()) {
 
-                    Angle finishing_orientation = Angle::quarter();
-                    if (current_gate % 2 != 0) {
-                        finishing_orientation = Angle::threeQuarter();
-                    }
+                    std::optional<Angle> finishing_orientation = std::nullopt;
 
                     if (current_gate == 4)
                     {
                         if (times_crossed == 3) {
                             continue; //done
                         }
+
+                        finishing_orientation =  std::nullopt;
 
                         if (times_crossed % 2 == 0)
                         {
@@ -67,8 +68,19 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
                         times_crossed++;
                     }
                     else {
-                        dribble_tactic->updateControlParams(gate_points[current_gate], finishing_orientation, 0.0);
-                        current_gate++;
+                        if (current_step == 1)
+                        {
+                            finishing_orientation = std::nullopt;
+                        }
+
+                        dribble_tactic->updateControlParams(gates[current_gate][current_step], finishing_orientation, 0.0);
+
+                        if (current_step == 1) {
+                            current_gate++;
+                            current_step = 0;
+                        }
+
+                        current_step++;
                     }
                 }
             }

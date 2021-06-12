@@ -42,7 +42,6 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_stopped)
 
 TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
 {
-    enableVisualizer();
     BallState ball_state(Point(-1.5, 0), Vector(0, 0));
     auto friendly_robots = TestUtil::createStationaryRobotStatesWithId(
             { Point(-1.9, 0)});

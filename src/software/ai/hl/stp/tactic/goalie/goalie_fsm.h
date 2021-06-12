@@ -304,6 +304,7 @@ struct GoalieFSM
                 .dribble_destination       = clear_origin,
                 .final_dribble_orientation = clear_direction,
                 .allow_excessive_dribbling = false,
+                .face_forward              = false
             };
 
             // update the dribble fsm

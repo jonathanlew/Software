@@ -91,7 +91,8 @@ struct AttackerFSM
             DribbleFSM::ControlParams control_params{
                 .dribble_destination       = std::nullopt,
                 .final_dribble_orientation = std::nullopt,
-                .allow_excessive_dribbling = true};
+                .allow_excessive_dribbling = true,
+                .face_forward              = false};
             processEvent(DribbleFSM::Update(control_params, event.common));
         };
 

@@ -3,10 +3,15 @@
 #include "shared/parameter/cpp_dynamic_parameters.h"
 #include "software/ai/hl/stp/play/play.h"
 
-const Point GATE_ONE_MIDPOINT = Point(-0.6, 0);
-const Point GATE_TWO_MIDPOINT = Point(0.1, 0);
-const Point GATE_THREE_MIDPOINT = Point(0.65, 0);
-const Point GATE_FOUR_MIDPOINT = Point(1.2, 0);
+std::array<Point, 2> GATE_ONE = {Point(-0.6, 0), Point(-0.2, 0.25)};
+std::array<Point, 2> GATE_TWO = {Point(0.1, 0), Point(0.4, -0.25)};
+std::array<Point, 2> GATE_THREE = {Point(0.65, 0), Point(0.9, 0.25)};
+std::array<Point, 2> GATE_FOUR = {Point(1.2, 0), Point(1.2, -0.2)};
+
+const Point GATE_ONE_MIDPOINT = Point(-0.6, 0.1);
+const Point GATE_TWO_MIDPOINT = Point(0.1, -0.1);
+const Point GATE_THREE_MIDPOINT = Point(0.65, 0.1);
+const Point GATE_FOUR_MIDPOINT = Point(1.2, -0.2);
 const Point GATE_FOUR_POS = Point(1.2, 0.2);
 const Point GATE_FOUR_NEG = Point(1.2, -0.2);
 
