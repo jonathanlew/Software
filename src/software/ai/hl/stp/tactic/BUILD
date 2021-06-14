@@ -71,6 +71,7 @@ cc_library(
         "//shared:constants",
         "//software/ai/evaluation:calc_best_shot",
         "//software/ai/hl/stp/action:move_action",
+        "//software/ai/hl/stp/tactic/dribble:dribble_tactic",
         "//software/ai/passing:pass",
         "//software/geom/algorithms",
         "//software/logger",
