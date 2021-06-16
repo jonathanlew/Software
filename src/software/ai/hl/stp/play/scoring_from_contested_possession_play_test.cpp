@@ -18,12 +18,13 @@ TEST_F(ScoringFromContestedPossessionPlayTest,
        test_scoring_from_contested_possession_stopped)
 {
     BallState ball_state(Point(-0.8, 0), Vector(0, 0));
-    auto friendly_robots = TestUtil::createStationaryRobotStatesWithId(
-        {Point(4, 0), Point(0.5, 0), Point(-3, 1)});
+    auto enemy_robots = TestUtil::createStationaryRobotStatesWithId({Point(-0.9, 0)});
+    auto friendly_robots =
+        TestUtil::createStationaryRobotStatesWithId({Point(0.5, 0), Point(-3, 1)});
     setFriendlyGoalie(0);
     setAIPlay(TYPENAME(ScoringFromContestedPossessionPlay));
 
-    setRefereeCommand(RefereeCommand::STOP, RefereeCommand::HALT);
+    setRefereeCommand(RefereeCommand::PREPARE_PENALTY_US, RefereeCommand::HALT);
 
     std::vector<ValidationFunction> terminating_validation_functions = {
         // This will keep the test running for 9.5 seconds to give everything enough
@@ -38,16 +39,18 @@ TEST_F(ScoringFromContestedPossessionPlayTest,
 
     std::vector<ValidationFunction> non_terminating_validation_functions = {};
 
-    runTest(field, ball_state, friendly_robots, {}, terminating_validation_functions,
-            non_terminating_validation_functions, Duration::fromSeconds(10));
+    runTest(field, ball_state, friendly_robots, enemy_robots,
+            terminating_validation_functions, non_terminating_validation_functions,
+            Duration::fromSeconds(10));
 }
 
 TEST_F(ScoringFromContestedPossessionPlayTest,
        test_scoring_from_contested_possession_force_start)
 {
     BallState ball_state(Point(-0.8, 0), Vector(0, 0));
-    auto friendly_robots = TestUtil::createStationaryRobotStatesWithId(
-        {Point(4, 0), Point(0.5, 0), Point(-3, 1)});
+    auto enemy_robots = TestUtil::createStationaryRobotStatesWithId({Point(-0.9, 0)});
+    auto friendly_robots =
+        TestUtil::createStationaryRobotStatesWithId({Point(0.5, 0), Point(-3, 1)});
     setFriendlyGoalie(0);
     setAIPlay(TYPENAME(ScoringFromContestedPossessionPlay));
 
@@ -66,6 +69,7 @@ TEST_F(ScoringFromContestedPossessionPlayTest,
 
     std::vector<ValidationFunction> non_terminating_validation_functions = {};
 
-    runTest(field, ball_state, friendly_robots, {}, terminating_validation_functions,
-            non_terminating_validation_functions, Duration::fromSeconds(10));
+    runTest(field, ball_state, friendly_robots, enemy_robots,
+            terminating_validation_functions, non_terminating_validation_functions,
+            Duration::fromSeconds(10));
 }
