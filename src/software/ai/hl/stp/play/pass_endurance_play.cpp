@@ -42,15 +42,15 @@ void PassEndurancePlay::getNextTactics(TacticCoroutine::push_type &yield,
      * Attempt to pass from point 0 to 1 to 2 and back to 0 again
      */
 
-    std::array<Point, NUM_ROBOTS> pass_points = {Point(-2.25, 2), Point(-4.25, -2),
-                                                 Point(-0.25, -2)};
+    std::array<Point, NUM_ROBOTS> pass_points = {Point(-2.25, 1), Point(-3.25, -1),
+                                                 Point(-1.25, -1)};
     std::unordered_map<Point, std::pair<Pass, Point>> start_point_to_pass_and_next_point;
     for (unsigned int i = 0; i < NUM_ROBOTS; i++)
     {
         start_point_to_pass_and_next_point.insert(
             {pass_points[i],
              std::make_pair(Pass(pass_points[i], pass_points[(i + 1) % NUM_ROBOTS],
-                                 BALL_MAX_SPEED_METERS_PER_SECOND - 1),
+                                 PASS_SPEED_M_PER_S),
                             pass_points[(i + 2) % NUM_ROBOTS])});
     }
 

@@ -21,4 +21,5 @@ class PassEndurancePlay : public Play
    private:
     // 3 robots for this hardware challenge
     static constexpr unsigned int NUM_ROBOTS = 3;
+    static constexpr double PASS_SPEED_M_PER_S = 2.5;
 };
