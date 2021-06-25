@@ -40,7 +40,9 @@ void ScoringFromContestedPossessionPlay::getNextTactics(TacticCoroutine::push_ty
         }
         else
         {
-            auto ball_position = world.ball().position();
+            // reset attacker in non-playing state
+            attacker_tactic_config = std::make_shared<AttackerTacticConfig>();
+            auto ball_position     = world.ball().position();
             // default to -x of destination
             Point destination =
                 ball_position -

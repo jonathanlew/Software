@@ -89,7 +89,11 @@ struct AttackerFSM
                                   back::process<DribbleFSM::Update> processEvent) {
             // TODO (#2073): Implement a more effective keep away tactic
             DribbleFSM::ControlParams control_params{
-                .dribble_destination       = std::nullopt,
+                .dribble_destination =
+                    event.common.robot.position() -
+                    Vector::createFromAngle(event.common.robot.orientation() +
+                                            Angle::quarter())
+                        .normalize(.1),
                 .final_dribble_orientation = std::nullopt,
                 .allow_excessive_dribbling = true};
             processEvent(DribbleFSM::Update(control_params, event.common));
@@ -104,18 +108,6 @@ struct AttackerFSM
          * @return if the ball should be kicked
          */
         const auto should_kick = [](auto event) {
-            // check for enemy threat
-            Circle about_to_steal_danger_zone(event.common.robot.position(),
-                                              event.control_params.attacker_tactic_config
-                                                  ->getEnemyAboutToStealBallRadius()
-                                                  ->value());
-            for (const auto &enemy : event.common.world.enemyTeam().getAllRobots())
-            {
-                if (contains(about_to_steal_danger_zone, enemy.position()))
-                {
-                    return true;
-                }
-            }
             // otherwise check for shot or pass
             return event.control_params.pass || event.control_params.shot;
         };

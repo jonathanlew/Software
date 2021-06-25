@@ -72,7 +72,7 @@ struct PivotKickFSM
          */
         const auto ball_kicked = [](auto event) {
             return event.common.world.ball().hasBallBeenKicked(
-                event.control_params.kick_direction);
+                event.control_params.kick_direction, 1.0);
         };
 
         return make_transition_table(
