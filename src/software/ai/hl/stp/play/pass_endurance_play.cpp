@@ -42,8 +42,8 @@ void PassEndurancePlay::getNextTactics(TacticCoroutine::push_type &yield,
      * Attempt to pass from point 0 to 1 to 2 and back to 0 again
      */
 
-    std::array<Point, NUM_ROBOTS> pass_points = {Point(-2.25, 1), Point(-3.25, -1),
-                                                 Point(-1.25, -1)};
+    std::array<Point, NUM_ROBOTS> pass_points = {Point(-2, 1), Point(-3, -1),
+                                                 Point(-1, -1)};
     std::unordered_map<Point, std::pair<Pass, Point>> start_point_to_pass_and_next_point;
     for (unsigned int i = 0; i < NUM_ROBOTS; i++)
     {
