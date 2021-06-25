@@ -70,10 +70,10 @@ const double SECONDS_PER_MILLISECOND      = 1.0 / 1000.0;
 const double MILLISECONDS_PER_MICROSECOND = 1.0 / 1000.0;
 
 // Indefinite dribbler mode sets a speed that can be maintained indefinitely
-const double INDEFINITE_DRIBBLER_SPEED = 1000.0;
+const double INDEFINITE_DRIBBLER_SPEED = 10;
 // Max force dribbler mode sets the speed that applies the maximum amount of force on the
 // ball
-const double MAX_FORCE_DRIBBLER_SPEED = 16000.0;
+const double MAX_FORCE_DRIBBLER_SPEED = 25;
 
 const double POSSESSION_TIMESTAMP_TOLERANCE_IN_MILLISECONDS = 10;
 

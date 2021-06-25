@@ -69,9 +69,9 @@ struct DribbleFSM
     static Point robotPositionToFaceBall(const Point &ball_position,
                                          const Angle &face_ball_angle)
     {
-        return ball_position -
-               Vector::createFromAngle(face_ball_angle)
-                   .normalize(DIST_TO_FRONT_OF_ROBOT_METERS + BALL_MAX_RADIUS_METERS);
+        return ball_position - Vector::createFromAngle(face_ball_angle)
+                                   .normalize(DIST_TO_FRONT_OF_ROBOT_METERS +
+                                              BALL_MAX_RADIUS_METERS - 0.045);
     }
 
     /**
@@ -200,8 +200,8 @@ struct DribbleFSM
          * @return if the ball has been have_possession
          */
         const auto have_possession = [](auto event) {
-            return event.common.robot.isNearDribbler(
-                event.common.world.ball().position());
+            return event.common.robot.isNearDribbler(event.common.world.ball().position(),
+                                                     0.005);
         };
 
         /**
@@ -248,7 +248,7 @@ struct DribbleFSM
                 event.common.robot.id(), intercept_position, face_ball_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW,
                 AutoChipOrKick{AutoChipOrKickMode::OFF, 0},
-                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0,
+                MaxAllowedSpeedMode::TIPTOE, 0.0,
                 event.control_params.face_forward));
         };
 
@@ -289,7 +289,7 @@ struct DribbleFSM
             event.common.set_intent(std::make_unique<MoveIntent>(
                 event.common.robot.id(), target_destination, target_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW, auto_chip_or_kick,
-                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0, face_forward));
+                MaxAllowedSpeedMode::TIPTOE, 0.0, face_forward));
         };
 
         /**
