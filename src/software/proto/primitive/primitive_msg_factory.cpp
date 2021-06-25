@@ -75,7 +75,7 @@ double convertDribblerModeToDribblerSpeed(DribblerMode dribbler_mode)
         case DribblerMode::INDEFINITE:
             return INDEFINITE_DRIBBLER_SPEED;
         case DribblerMode::MAX_FORCE:
-            return MAX_FORCE_DRIBBLER_SPEED;
+            return 22;
         case DribblerMode::OFF:
             return 0.0;
         default:
