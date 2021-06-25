@@ -26,15 +26,14 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
                                           const World &world)
 {
     std::shared_ptr<DribbleTactic> dribble_tactic = std::make_shared<DribbleTactic>();
-    dribble_tactic->updateRobot(world.friendlyTeam().getRobotById(0).value());
 
     std::shared_ptr<MoveTactic> move_tactic = std::make_shared<MoveTactic>(true);
 
     size_t current_gate = 0;
     size_t current_step = 0;
-    std::array<Point, 4> gate_points = {GATE_ONE_MIDPOINT, GATE_TWO_MIDPOINT, GATE_THREE_MIDPOINT, GATE_FOUR_MIDPOINT};
+    std::array<Point, 5> gate_points = {            Point(-1.4, -1.45), Point(-1.6, -0.6), Point(-1.4, 0.1), Point(-1.6, .65), Point(-1.3, 1.2)};
 
-    std::array<std::array<Point, 2>, 4> gates = {GATE_ONE, GATE_TWO, GATE_THREE, GATE_FOUR};
+    std::array<std::array<Point, 2>, 5> gates = {GATE_ONE, GATE_TWO, GATE_THREE, GATE_FOUR, GATE_FIVE};
 
     int times_crossed = 0;
 

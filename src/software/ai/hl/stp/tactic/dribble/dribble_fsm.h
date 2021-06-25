@@ -148,7 +148,7 @@ struct DribbleFSM
     {
         // Default is face ball direction
         Angle target_orientation = (ball_position - robot_position).orientation();
-        if (final_dribble_orientation)
+        if (final_dribble_orientation.has_value())
         {
             target_orientation = final_dribble_orientation.value();
         }
@@ -219,12 +219,6 @@ struct DribbleFSM
                                      event.common.world.ball().position(),
                                      event.control_params.dribble_destination),
                                  BALL_CLOSE_TO_DEST_THRESHOLD) &&
-                   compareAngles(event.common.robot.orientation(),
-                                 getFinalDribbleOrientation(
-                                     event.common.world.ball().position(),
-                                     event.common.robot.position(),
-                                     event.control_params.final_dribble_orientation),
-                                 FINAL_DESTINATION_CLOSE_THRESHOLD) &&
                    have_possession(event) &&
                    robotStopped(event.common.robot, ROBOT_DRIBBLING_DONE_SPEED);
         };
@@ -248,7 +242,7 @@ struct DribbleFSM
                 event.common.robot.id(), intercept_position, face_ball_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW,
                 AutoChipOrKick{AutoChipOrKickMode::OFF, 0},
-                MaxAllowedSpeedMode::TIPTOE, 0.0,
+                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0,
                 event.control_params.face_forward));
         };
 
@@ -289,7 +283,7 @@ struct DribbleFSM
             event.common.set_intent(std::make_unique<MoveIntent>(
                 event.common.robot.id(), target_destination, target_orientation, 0,
                 DribblerMode::MAX_FORCE, BallCollisionType::ALLOW, auto_chip_or_kick,
-                MaxAllowedSpeedMode::TIPTOE, 0.0, face_forward));
+                MaxAllowedSpeedMode::PHYSICAL_LIMIT, 0.0, face_forward));
         };
 
         /**

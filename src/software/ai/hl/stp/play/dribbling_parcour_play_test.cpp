@@ -48,7 +48,7 @@ TEST_F(DribblingParcourPlayTest, test_dribbling_parcour_play_force_start)
     setFriendlyGoalie(0);
 
     auto enemy_robots = TestUtil::createStationaryRobotStatesWithId(
-            {Point(1.5, 0), Point(0.9, 0), Point(0.4, 0), Point(-0.2, 0), Point(-1, 0)});
+            {Point(-1.5, -1.9), Point(-1.5, -1), Point(-1.5, -0.2), Point(-1.5, .4), Point(-1.5, 0.9), Point(-1.5, 1.5)});
 
     setAIPlay(TYPENAME(DribblingParcourPlay));
 
