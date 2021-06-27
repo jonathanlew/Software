@@ -54,20 +54,7 @@ void ReceiverTactic::calculateNextAction(ActionCoroutine::push_type& yield)
         // If there is a feasible shot we can take, we want to wait for the pass at the
         // halfway point between the angle required to receive the ball and the angle
         // for a one-time shot
-        std::optional<Shot> shot = findFeasibleShot();
         Angle desired_angle      = pass.receiverOrientation();
-        if (shot)
-        {
-            Point target_position = shot->getPointToShootAt();
-
-            Angle shot_angle = (target_position - robot_->position()).orientation();
-
-            // If we do have a valid shot on net, orient the robot to face in-between
-            // the pass vector and shot vector, so the robot can quickly orient itself
-            // to either receive the pass, or take the shot. Also, not directly facing
-            // where we plan on kicking may throw off the enemy AI
-            desired_angle = (shot_angle + pass.receiverOrientation()) / 2;
-        }
         // We want the robot to move to the receiving position for the shot and also
         // rotate to the correct orientation
         move_action->updateControlParams(*robot_, pass.receiverPoint(), desired_angle, 0,
@@ -75,46 +62,6 @@ void ReceiverTactic::calculateNextAction(ActionCoroutine::push_type& yield)
         yield(move_action);
     }
 
-    // Vector from the ball to the robot
-    Vector ball_to_robot_vector   = ball.position() - robot_->position();
-    std::optional<Shot> best_shot = findFeasibleShot();
-    if (best_shot)
-    {
-        LOG(DEBUG) << "Taking one-touch shot";
-        auto best_shot_target = best_shot->getPointToShootAt();
-
-        // The angle between the ball velocity and a vector from the ball to the robot
-        Vector ball_velocity = ball.velocity();
-        ball_to_robot_vector = robot_->position() - ball.position();
-        Angle ball_robot_angle =
-            ball_velocity.orientation().minDiff(ball_to_robot_vector.orientation());
-
-        // Keep trying to shoot the ball while it's traveling roughly towards the robot
-        // (or moving slowly because we can't be certain of the velocity vector if it is)
-        while (ball_robot_angle.abs() < Angle::fromDegrees(90) ||
-               ball_velocity.length() < 0.5)
-        {
-            Shot shot =
-                getOneTimeShotPositionAndOrientation(*robot_, ball, best_shot_target);
-            Point ideal_position    = shot.getPointToShootAt();
-            Angle ideal_orientation = shot.getOpenAngle();
-
-            // Kicking at less than ball max speed to make sure we don't break rules
-            move_action->updateControlParams(
-                *robot_, ideal_position, ideal_orientation, 0, DribblerMode::OFF,
-                BallCollisionType::ALLOW,
-                {AutoChipOrKickMode::AUTOKICK, BALL_MAX_SPEED_METERS_PER_SECOND - 1});
-            yield(move_action);
-
-            // Calculations to check for termination conditions
-            ball_to_robot_vector = robot_->position() - ball.position();
-            ball_robot_angle =
-                ball_velocity.orientation().minDiff(ball_to_robot_vector.orientation());
-        }
-    }
-    // If we can't shoot on the enemy goal, just try to receive the pass as cleanly as
-    // possible
-    else
     {
         LOG(DEBUG) << "Receiving and dribbling";
         while ((ball.position() - robot_->position()).length() >

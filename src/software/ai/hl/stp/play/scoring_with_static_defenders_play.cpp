@@ -55,7 +55,7 @@ void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &
     PassWithRating best_pass_and_score_so_far = pass_eval.getBestPassOnField();
 
     auto ranked_zones = pass_eval.rankZonesForReceiving(
-        world, best_pass_and_score_so_far.pass.receiverPoint());
+        world, world.ball().position());
 
     using Zones              = std::unordered_set<EighteenZoneId>;
     Zones cherry_pick_region = {ranked_zones[0]};
@@ -93,10 +93,11 @@ void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &
         }
         else if (world.gameState().isOurFreeKick())
         {
-            while (!align_to_pass_tactic->getAssignedRobot())
+            while (!align_to_pass_tactic->getAssignedRobot() || best_pass_and_score_so_far.rating < 0.2)
             {
                 pass_eval = pass_generator.generatePassEvaluation(world);
-                pass      = pass_eval.getBestPassInZones(cherry_pick_region).pass;
+                best_pass_and_score_so_far      = pass_eval.getBestPassInZones(cherry_pick_region);
+                pass = best_pass_and_score_so_far.pass;
 
                 cherry_pick_tactic->updateControlParams(
                     pass.receiverPoint(), pass.receiverOrientation(), 0.0,
