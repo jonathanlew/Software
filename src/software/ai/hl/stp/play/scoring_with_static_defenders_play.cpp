@@ -26,19 +26,6 @@ bool ScoringWithStaticDefendersPlay::invariantHolds(const World &world) const
     return false;
 }
 
-void ScoringWithStaticDefendersPlay::updateAlignToBallTactic(
-    std::shared_ptr<MoveTactic> align_to_ball_tactic, Pass pass, const World &world)
-{
-    Vector ball_to_center_vec =
-        Vector(pass.receiverPoint().toVector()) - world.ball().position().toVector();
-    // We want the kicker to get into position behind the ball facing the center
-    // of the field
-    align_to_ball_tactic->updateControlParams(
-        world.ball().position() -
-            ball_to_center_vec.normalize(ROBOT_MAX_RADIUS_METERS * 2),
-        ball_to_center_vec.orientation(), 0);
-}
-
 void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &yield,
                                                     const World &world)
 {
@@ -63,15 +50,6 @@ void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &
     // set 1 robot to get in position to receive good pass
     auto cherry_pick_tactic = std::make_shared<MoveTactic>(false);
 
-    // This tactic will move a robot into position to initially pass the ball
-    auto align_to_pass_tactic = std::make_shared<MoveTactic>(false);
-    Vector ball_to_receiver_vector =
-        best_pass_and_score_so_far.pass.receiverPoint().toVector() -
-        world.ball().position().toVector();
-    align_to_pass_tactic->updateControlParams(
-        world.ball().position() -
-            ball_to_receiver_vector.normalize(ROBOT_MAX_RADIUS_METERS * 2),
-        ball_to_receiver_vector.orientation(), 0);
     Pass pass = best_pass_and_score_so_far.pass;
 
     do
@@ -93,7 +71,9 @@ void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &
         }
         else if (world.gameState().isOurFreeKick())
         {
-            while (!align_to_pass_tactic->getAssignedRobot() || best_pass_and_score_so_far.rating < 0.2)
+            auto attacker =
+                std::make_shared<AttackerTactic>(play_config->getAttackerTacticConfig());
+            while ( best_pass_and_score_so_far.rating < 0.2)
             {
                 pass_eval = pass_generator.generatePassEvaluation(world);
                 best_pass_and_score_so_far      = pass_eval.getBestPassInZones(cherry_pick_region);
@@ -103,21 +83,17 @@ void ScoringWithStaticDefendersPlay::getNextTactics(TacticCoroutine::push_type &
                     pass.receiverPoint(), pass.receiverOrientation(), 0.0,
                     MaxAllowedSpeedMode::PHYSICAL_LIMIT);
 
-                updateAlignToBallTactic(align_to_pass_tactic, pass, world);
-
-                yield({{align_to_pass_tactic, cherry_pick_tactic}});
+                yield({{attacker, cherry_pick_tactic}});
             }
             // Perform the pass and wait until the receiver is finished
-            auto attacker_make_pass =
-                std::make_shared<AttackerTactic>(play_config->getAttackerTacticConfig());
             auto receiver = std::make_shared<ReceiverTactic>(
                 world.field(), world.friendlyTeam(), world.enemyTeam(), pass,
                 world.ball(), false);
             do
             {
-                attacker_make_pass->updateControlParams(pass);
+                attacker->updateControlParams(pass);
                 receiver->updateControlParams(pass);
-                yield({{attacker_make_pass, receiver}});
+                yield({{attacker, receiver}});
             } while (!receiver->done());
 
             auto attacker_take_shot =
