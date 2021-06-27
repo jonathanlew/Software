@@ -170,7 +170,7 @@ struct DribbleFSM
         std::optional<Angle> final_dribble_orientation_opt)
     {
         Point dribble_destination =
-            getDribbleBallDestination(ball.position(), dribble_destination_opt);
+            getDribbleBallDestination(ball.position() + (robot.position() - ball.position()).normalize(0.05), dribble_destination_opt);
 
         // Default destination and orientation assume ball is at the destination
         // pivot to final face ball destination

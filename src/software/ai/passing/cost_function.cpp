@@ -21,6 +21,7 @@ double ratePass(const World& world, const Pass& pass, const Rectangle& zone,
 
     double friendly_kick_pass_rating =
         rateKickPassFriendlyCapability(world.friendlyTeam(), pass, passing_config);
+    (void)friendly_kick_pass_rating;
     double friendly_chip_pass_rating =
         rateChipPassFriendlyCapability(world.friendlyTeam(), pass, passing_config);
 
@@ -33,8 +34,9 @@ double ratePass(const World& world, const Pass& pass, const Rectangle& zone,
         Duration::fromSeconds(passing_config->getEnemyReactionTime()->value()));
 
     double chip_pass_rating = friendly_chip_pass_rating * enemy_chip_pass_rating;
-    double kick_pass_rating = friendly_kick_pass_rating * enemy_kick_pass_rating;
-    double pass_rating      = std::max(kick_pass_rating, chip_pass_rating);
+    double kick_pass_rating = enemy_kick_pass_rating;
+    (void)chip_pass_rating;
+    double pass_rating      = (kick_pass_rating);
 
     double in_region_quality = rectangleSigmoid(zone, pass.receiverPoint(), 0.2);
 
@@ -62,7 +64,7 @@ double rateZone(const World& world, const Rectangle& zone, const Point& receive_
     // of what our pass scores would be if we sent a robot there.
     const size_t X_POINTS_TO_SAMPLE         = 5;
     const size_t Y_POINTS_TO_SAMPLE         = 5;
-    const size_t NUM_COST_FUNCTIONS_SAMPLED = 3;
+    const size_t NUM_COST_FUNCTIONS_SAMPLED = 1;
 
     double zone_rating = 0.0;
     double x_step      = zone.xLength() / X_POINTS_TO_SAMPLE;
@@ -77,13 +79,6 @@ double rateZone(const World& world, const Rectangle& zone, const Point& receive_
 
             zone_rating += ratePassShootScore(world.field(), world.enemyTeam(), pass,
                                               passing_config);
-            zone_rating += rateKickPassEnemyRisk(
-                world.enemyTeam(), pass,
-                Duration::fromSeconds(passing_config->getEnemyReactionTime()->value()),
-                passing_config->getEnemyProximityImportance()->value());
-            zone_rating += rateChipPassEnemyRisk(
-                world.enemyTeam(), pass,
-                Duration::fromSeconds(passing_config->getEnemyReactionTime()->value()));
         }
     }
 
