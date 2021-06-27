@@ -90,9 +90,9 @@ double convertMaxAllowedSpeedModeToMaxAllowedSpeed(
     switch (max_allowed_speed_mode)
     {
         case MaxAllowedSpeedMode::PHYSICAL_LIMIT:
-            return ROBOT_MAX_SPEED_METERS_PER_SECOND;
+            return ROBOT_MAX_SPEED_M_PER_S;
         case MaxAllowedSpeedMode::STOP_COMMAND:
-            return STOP_COMMAND_ROBOT_MAX_SPEED_METERS_PER_SECOND;
+            return STOP_COMMAND_ROBOT_MAX_SPEED_M_PER_S;
         case MaxAllowedSpeedMode::TIPTOE:
             return 0.5;
         default:

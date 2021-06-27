@@ -32,7 +32,7 @@ void drawRobotVelocity(QGraphicsScene* scene, const Point& position,
 
     double speed     = velocity.length();
     auto line_length = normalizeValueToRange<double>(
-        speed, 0, ROBOT_MAX_SPEED_METERS_PER_SECOND, 0.0, max_velocity_line_length);
+        speed, 0, ROBOT_MAX_SPEED_M_PER_S, 0.0, max_velocity_line_length);
 
     drawSegment(scene, Segment(position, position + velocity.normalize(line_length)),
                 pen);
