@@ -276,7 +276,7 @@ double calculateKickInterceptRisk(const Robot& enemy_robot, const Pass& pass,
     Duration enemy_robot_time_to_closest_pass_point = getTimeToPositionForRobot(
         enemy_robot.position(), closest_point_on_pass_to_robot,
         ENEMY_ROBOT_MAX_SPEED_M_PER_S,
-        ENEMY_ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED, ROBOT_MAX_RADIUS_METERS);
+        ENEMY_ROBOT_MAX_ACCELERATION_M_PER_S_2, ROBOT_MAX_RADIUS_METERS);
     Duration ball_time_to_closest_pass_point = Duration::fromSeconds(
         (closest_point_on_pass_to_robot - pass.passerPoint()).length() / pass.speed());
 
@@ -292,7 +292,7 @@ double calculateKickInterceptRisk(const Robot& enemy_robot, const Pass& pass,
     Duration enemy_robot_time_to_pass_receive_position = getTimeToPositionForRobot(
         enemy_robot.position(), pass.receiverPoint(),
         ENEMY_ROBOT_MAX_SPEED_M_PER_S,
-        ENEMY_ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED, ROBOT_MAX_RADIUS_METERS);
+        ENEMY_ROBOT_MAX_ACCELERATION_M_PER_S_2, ROBOT_MAX_RADIUS_METERS);
     Duration ball_time_to_pass_receive_position = pass.estimatePassDuration();
 
     // FUTURE TODO (#2167): IMPORTANT!!!

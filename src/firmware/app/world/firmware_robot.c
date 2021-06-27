@@ -120,14 +120,14 @@ void force_wheels_followPosTrajectory(const FirmwareRobot_t* robot,
     const float dest_speed = pos_trajectory.linear_speed[trajectory_index];
 
     // plan major axis movement
-    const double ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.0;
-    float max_major_a     = (float)ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED;
+    const double ROBOT_MAX_ACCELERATION_M_PER_S_2 = 3.0;
+    float max_major_a     = (float)ROBOT_MAX_ACCELERATION_M_PER_S_2;
     float max_major_v     = max_speed_m_per_s;
     float major_params[3] = {dest_speed, max_major_a, max_major_v};
     app_physbot_planMove(&pb.maj, major_params);
 
     // plan minor axis movement
-    float max_minor_a = (float)ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED / 2.0f;
+    float max_minor_a = (float)ROBOT_MAX_ACCELERATION_M_PER_S_2 / 2.0f;
     float max_minor_v = max_speed_m_per_s / 2.0f;
     float minor_params[3] = {0, max_minor_a, max_minor_v};
     app_physbot_planMove(&pb.min, minor_params);

@@ -63,10 +63,10 @@ TEST(PassingEvaluationTest, getTimeToPositionForRobot_reaches_max_velocity)
     double distance_to_dest = (robot_location - dest).length();
 
     double acceleration_time = ROBOT_MAX_SPEED_M_PER_S /
-                               ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED;
+                               ROBOT_MAX_ACCELERATION_M_PER_S_2;
     // x = v*t + 1/2*a*t^2, v = initial velocity = 0
     double acceleration_distance = 0.5 *
-                                   ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED *
+                                   ROBOT_MAX_ACCELERATION_M_PER_S_2 *
                                    std::pow(acceleration_time, 2);
     double time_at_max_vel = (distance_to_dest - 2 * acceleration_distance) /
                              ROBOT_MAX_SPEED_M_PER_S;
@@ -95,10 +95,10 @@ TEST(PassingEvaluationTest, getTimeToPositionForRobot_reaches_max_velocity_with_
     double distance_to_dest = (robot_location - first_point_in_tolerance).length();
 
     double acceleration_time = ROBOT_MAX_SPEED_M_PER_S /
-                               ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED;
+                               ROBOT_MAX_ACCELERATION_M_PER_S_2;
     // x = v*t + 1/2*a*t^2, v = initial velocity = 0
     double acceleration_distance = 0.5 *
-                                   ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED *
+                                   ROBOT_MAX_ACCELERATION_M_PER_S_2 *
                                    std::pow(acceleration_time, 2);
     double time_at_max_vel = (distance_to_dest - 2 * acceleration_distance) /
                              ROBOT_MAX_SPEED_M_PER_S;

@@ -695,7 +695,7 @@ TEST_F(PassingEvaluationTest,
     // from a stop
     // x = u*t + 1/2*at^2, u=0, t=1
     double enemy_travel_distance_from_stop =
-        0.5 * ENEMY_ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED;
+        0.5 * ENEMY_ROBOT_MAX_ACCELERATION_M_PER_S_2;
     Robot enemy_robot(0, {0, enemy_travel_distance_from_stop}, {0, 0}, Angle::zero(),
                       AngularVelocity::zero(), Timestamp::fromSeconds(0));
     Pass pass({0, 0}, {0, 2}, 0.5);

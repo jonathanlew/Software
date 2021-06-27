@@ -37,9 +37,9 @@ static const double ROBOT_WITH_BATTERY_MASS_KG = 2.465;
 // The maximum speed achievable by our robots, in metres per second.
 static const double ROBOT_MAX_SPEED_M_PER_S = 2.0;
 // The maximum angular speed achievable by our robots, in rad/sec
-static const double ROBOT_MAX_ANG_SPEED_RAD_PER_SECOND = 4 * M_PI;
+static const double ROBOT_MAX_ANG_SPEED_RAD_PER_S = 4 * M_PI;
 // The maximum acceleration achievable by our robots, in metres per seconds squared.
-static const double ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.0;
+static const double ROBOT_MAX_ACCELERATION_M_PER_S_2 = 3.0;
 // The maximum angular acceleration achievable by our robots, in radians per second
 // squared
 static const double ROBOT_MAX_ANG_ACCELERATION_RAD_PER_S_2 = 10.0;
@@ -47,7 +47,7 @@ static const double ROBOT_MAX_ANG_ACCELERATION_RAD_PER_S_2 = 10.0;
 // The maximum speed attainable by enemy robots
 static const double ENEMY_ROBOT_MAX_SPEED_M_PER_S = 3.0;
 // The maximum acceleration achievable by enemy robots, in metres per seconds squared.
-static const double ENEMY_ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4.0;
+static const double ENEMY_ROBOT_MAX_ACCELERATION_M_PER_S_2 = 4.0;
 
 static const double ACCELERATION_DUE_TO_GRAVITY_METERS_PER_SECOND_SQUARED = 9.81;
 
@@ -74,6 +74,25 @@ const double INDEFINITE_DRIBBLER_SPEED = 1000.0;
 // Max force dribbler mode sets the speed that applies the maximum amount of force on the
 // ball
 const double MAX_FORCE_DRIBBLER_SPEED = 22;
+
+/** absolute angle to each of the front wheels as
+ * measured from the front of the robots in degrees
+ * For 3rd generation robot 2015 CAD model
+ * Last updated: Feb 3, 2018
+ *
+ * FW = ANGLE_TO_ROBOT_FRONT_WHEELS_DEG
+ * BW = ANGLE_TO_ROBOT_BACK_WHEELS_DEG
+ *
+ * /-------------\
+ * |FW    |   -FW|
+ * |             |
+ * |             |
+ * |BW    |   -BW|
+ * \-------------/
+ */
+const double ANGLE_TO_ROBOT_FRONT_WHEELS_DEG = 57.945;
+const double ANGLE_TO_ROBOT_BACK_WHEELS_DEG  = 136.04;
+
 
 // Networking
 // the IPv6 multicast address, only ff02 is important, the rest is random

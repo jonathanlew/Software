@@ -104,11 +104,11 @@ void app_move_primitive_start(TbotsProto_MovePrimitive prim_msg, void* void_stat
         .t_end               = 1.0f,
         .num_elements        = 10,
         .max_allowable_linear_acceleration =
-            (float)ROBOT_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED,
+            (float)ROBOT_MAX_ACCELERATION_M_PER_S_2,
         .max_allowable_linear_speed = max_speed_m_per_s,
         .max_allowable_angular_acceleration =
             (float)ROBOT_MAX_ANG_ACCELERATION_RAD_PER_S_2,
-        .max_allowable_angular_speed = (float)ROBOT_MAX_ANG_SPEED_RAD_PER_SECOND,
+        .max_allowable_angular_speed = (float)ROBOT_MAX_ANG_SPEED_RAD_PER_S,
         .initial_linear_speed        = current_speed,
         .final_linear_speed          = speed_at_dest_m_per_s};
     state->num_trajectory_elems = path_parameters.num_elements;
