@@ -48,7 +48,7 @@ void DribblingParcourPlay::getNextTactics(TacticCoroutine::push_type &yield,
 
                     std::optional<Angle> finishing_orientation = std::nullopt;
 
-                    if (current_gate == 4)
+                    if (current_gate == 5)
                     {
                         if (times_crossed == 3) {
                             continue; //done
