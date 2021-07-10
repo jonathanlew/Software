@@ -20,6 +20,7 @@ void io_primitive_executor_init(FirmwareWorld_t* world,
 
 void io_primitive_starter_task(void* argument)
 {
+    static uint32_t fw_sequence_number = 1;
     ProtoMulticastCommunicationProfile_t* comm_profile =
         (ProtoMulticastCommunicationProfile_t*)argument;
 
@@ -39,10 +40,20 @@ void io_primitive_starter_task(void* argument)
                 .robot_primitives[0]
                 .value;
 
+        uint32_t sequence_number = 
+            (*(TbotsProto_PrimitiveSet*)
+                 io_proto_multicast_communication_profile_getProtoStruct(comm_profile))
+                .sequence_number;
+
+
         io_proto_multicast_communication_profile_releaseLock(comm_profile);
 
-        app_primitive_manager_startNewPrimitive(g_primitive_manager, g_world,
-                                                primitive_msg);
+        TLOG_WARNING("FW Sequence Number: %d, Primitive Set Sequence number: %d\n", fw_sequence_number, sequence_number);
+        fw_sequence_number++;
+
+        (void)primitive_msg;
+     //   app_primitive_manager_startNewPrimitive(g_primitive_manager, g_world,
+     //                                           primitive_msg);
     }
 }
 

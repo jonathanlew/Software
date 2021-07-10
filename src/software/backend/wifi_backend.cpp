@@ -31,11 +31,11 @@ WifiBackend::WifiBackend(std::shared_ptr<const BackendConfig> config)
     });
 
     // setup estop
-    boost::asio::io_service io_service;
-    std::unique_ptr<BoostUartCommunication> uart_device =
-        std::make_unique<BoostUartCommunication>(io_service, ARDUINO_BAUD_RATE,
-                                                 arduino_config->getPort()->value());
-    estop_reader = std::make_unique<ThreadedEstopReader>(std::move(uart_device), 0);
+//    boost::asio::io_service io_service;
+//    std::unique_ptr<BoostUartCommunication> uart_device =
+//        std::make_unique<BoostUartCommunication>(io_service, ARDUINO_BAUD_RATE,
+//                                                 arduino_config->getPort()->value());
+//    estop_reader = std::make_unique<ThreadedEstopReader>(std::move(uart_device), 0);
 
     // connect to current channel
     joinMulticastChannel(channel, network_interface);
@@ -43,8 +43,9 @@ WifiBackend::WifiBackend(std::shared_ptr<const BackendConfig> config)
 
 void WifiBackend::onValueReceived(TbotsProto::PrimitiveSet primitives)
 {
+    static unsigned int sequence_number = 1;
     // check if estop has been set
-    if (estop_reader != nullptr && !estop_reader->isEstopPlay())
+    if (estop_reader == nullptr || (estop_reader != nullptr && !estop_reader->isEstopPlay()))
     {
         auto robot_primitives_map = primitives.mutable_robot_primitives();
 
@@ -54,6 +55,9 @@ void WifiBackend::onValueReceived(TbotsProto::PrimitiveSet primitives)
             primitive.second = *createEstopPrimitive();
         }
     }
+
+    primitives.set_sequence_number(sequence_number);
+    sequence_number ++;
 
     primitive_output->sendProto(primitives);
 
